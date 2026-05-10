@@ -1,10 +1,550 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Website</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SO BASICALLY XP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Tahoma", "Segoe UI", sans-serif;
+            background: linear-gradient(180deg, #5a7fbd 0%, #3d6098 50%, #2d5180 100%);
+            height: 100vh;
+            overflow: hidden;
+            cursor: default;
+        }
+
+        /* Login Screen */
+        .login-screen {
+            height: calc(100vh - 40px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .login-screen.hidden {
+            display: none;
+        }
+
+        .windows-logo {
+            margin-bottom: 80px;
+        }
+
+        .windows-logo video {
+            height: 150px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .user-profile {
+            background: linear-gradient(180deg, #eef4ff 0%, #d6e5f7 100%);
+            border: 2px solid #fff;
+            border-radius: 8px;
+            padding: 30px 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 400px;
+        }
+
+        .user-profile:hover {
+            background: linear-gradient(180deg, #fff5e6 0%, #ffe5b4 100%);
+            border-color: #ffcc66;
+        }
+
+        .user-profile:active {
+            transform: translateY(2px);
+        }
+
+        .user-avatar {
+            width: 64px;
+            height: 64px;
+            border: 2px solid #0066cc;
+            border-radius: 4px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 4px;
+        }
+
+        .user-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #003d7a;
+            letter-spacing: 2px;
+        }
+
+        .login-instruction {
+            text-align: center;
+            margin-top: 40px;
+            color: #fff;
+            font-size: 14px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Desktop */
+        .desktop {
+            display: none;
+            height: calc(100vh - 40px);
+            padding: 30px;
+            position: relative;
+        }
+
+        .desktop.active {
+            display: block;
+        }
+
+        /* Event Poster on Desktop */
+        .event-poster {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            width: 350px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .event-poster:hover {
+            transform: scale(1.02);
+        }
+
+        .event-poster:active {
+            transform: scale(0.98);
+        }
+
+        .poster-container {
+            background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+            border: 3px solid #fff;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            border-radius: 4px;
+        }
+
+        .poster-date {
+            font-size: 80px;
+            font-weight: 900;
+            color: #fff;
+            line-height: 0.9;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .poster-month {
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .poster-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .poster-location {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .poster-label {
+            margin-top: 10px;
+            text-align: center;
+            color: #fff;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Taskbar */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(180deg, #245edb 0%, #1941a5 50%, #13308a 100%);
+            border-top: 2px solid #5a9cff;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+        }
+
+        .start-button {
+            background: linear-gradient(180deg, #5ecd5e 0%, #3db33d 100%);
+            border: 1px solid #fff;
+            border-radius: 4px;
+            padding: 4px 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .start-button:hover {
+            background: linear-gradient(180deg, #6fdf6f 0%, #4dc44d 100%);
+        }
+
+        .start-button:active {
+            box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .start-icon {
+            width: 20px;
+            height: 20px;
+            filter: invert(1);
+        }
+
+        .start-text {
+            font-weight: bold;
+            color: #fff;
+            font-size: 13px;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+        }
+
+        .taskbar-divider {
+            width: 2px;
+            height: 28px;
+            background: linear-gradient(180deg, #5a9cff 0%, #1941a5 100%);
+            margin: 0 6px;
+        }
+
+        .taskbar-time {
+            margin-left: auto;
+            color: #fff;
+            font-size: 12px;
+            padding: 4px 12px;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Window */
+        .window {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            max-width: 90vw;
+            max-height: 80vh;
+            background: #fff;
+            border: 2px solid #0054e3;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .window.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .window-title-bar {
+            background: linear-gradient(180deg, #0997ff 0%, #0053ee 100%);
+            padding: 6px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 6px 6px 0 0;
+            cursor: move;
+        }
+
+        .window-title {
+            color: #fff;
+            font-weight: bold;
+            font-size: 13px;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .window-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 4px;
+        }
+
+        .window-button {
+            width: 24px;
+            height: 22px;
+            background: linear-gradient(180deg, #e9f1ff 0%, #c9deff 100%);
+            border: 1px solid #003c74;
+            border-radius: 3px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .window-button:hover {
+            background: linear-gradient(180deg, #fff5e6 0%, #ffe5b4 100%);
+        }
+
+        .window-button:active {
+            background: linear-gradient(180deg, #c9deff 0%, #a9beff 100%);
+        }
+
+        .window-button.close:hover {
+            background: linear-gradient(180deg, #ff6b6b 0%, #ff4444 100%);
+            color: #fff;
+        }
+
+        .window-content {
+            padding: 30px;
+            overflow-y: auto;
+            flex: 1;
+            background: #fff;
+        }
+
+        .event-detail-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .event-detail-date {
+            font-size: 18px;
+            color: #ff0000;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .event-detail-title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #000;
+        }
+
+        .event-detail-location {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .event-detail-description {
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .event-detail-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .info-block h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ff0000;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .info-block p,
+        .info-block ul {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .info-block ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-block li {
+            margin: 6px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .event-poster {
+                width: 280px;
+            }
+
+            .poster-date {
+                font-size: 60px;
+            }
+
+            .poster-month {
+                font-size: 20px;
+            }
+
+            .poster-title {
+                font-size: 18px;
+            }
+
+            .window {
+                width: 95vw;
+            }
+
+            .event-detail-title {
+                font-size: 24px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello World</h1>
-    <p>My website is live!</p>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="windows-logo">
+            <video autoplay loop muted playsinline>
+                <source src="so_basically_spinning_logo.mp4" type="video/mp4">
+            </video>
+        </div>
+        
+        <div class="user-profile" onclick="login()">
+            <div class="user-avatar">
+                <img src="THE_so_basically_logo_Black_copy.png" alt="SO BASICALLY">
+            </div>
+            <div class="user-name">SO BASICALLY</div>
+        </div>
+
+        <div class="login-instruction">To begin, click to enter</div>
+    </div>
+
+    <!-- Desktop -->
+    <div class="desktop" id="desktop">
+        <!-- Event Poster (clickable) -->
+        <div class="event-poster" onclick="openEventWindow()">
+            <div class="poster-container">
+                <div class="poster-date">14</div>
+                <div class="poster-month">JUNE</div>
+                <div class="poster-title">Summer Sessions Vol. 1</div>
+                <div class="poster-location">The Exchange, Winnipeg</div>
+            </div>
+            <div class="poster-label">NEXT EVENT</div>
+        </div>
+
+        <!-- Event Detail Window -->
+        <div class="window" id="eventWindow">
+            <div class="window-title-bar">
+                <div class="window-title">
+                    <img src="THE_so_basically_logo_Black_copy.png" alt="" class="window-icon">
+                    Summer Sessions Vol. 1
+                </div>
+                <div class="window-controls">
+                    <div class="window-button minimize">_</div>
+                    <div class="window-button maximize">□</div>
+                    <div class="window-button close" onclick="closeEventWindow()">×</div>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="event-detail-header">
+                    <div class="event-detail-date">JUNE 14, 2026</div>
+                    <h2 class="event-detail-title">Summer Sessions Vol. 1</h2>
+                    <div class="event-detail-location">The Exchange · Winnipeg, MB</div>
+                </div>
+
+                <p class="event-detail-description">
+                    Kicking off summer with an afternoon of live music, local art, and good vibes. Bringing together Winnipeg's creative community for a celebration of sound and vision.
+                </p>
+
+                <div class="event-detail-info">
+                    <div class="info-block">
+                        <h4>Lineup</h4>
+                        <ul>
+                            <li>TBA</li>
+                            <li>TBA</li>
+                            <li>TBA</li>
+                        </ul>
+                    </div>
+                    <div class="info-block">
+                        <h4>Time</h4>
+                        <p>2:00 PM - 10:00 PM</p>
+                    </div>
+                    <div class="info-block">
+                        <h4>Tickets</h4>
+                        <p>Details coming soon</p>
+                    </div>
+                    <div class="info-block">
+                        <h4>Contact</h4>
+                        <p>contact@sobasically.ca</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <div class="start-button">
+            <img src="THE_so_basically_logo_Black_copy.png" alt="" class="start-icon">
+            <span class="start-text">so basically</span>
+        </div>
+        <div class="taskbar-divider"></div>
+        <div class="taskbar-time" id="taskbarTime"></div>
+    </div>
+
+    <script>
+        function login() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('desktop').classList.add('active');
+        }
+
+        function openEventWindow() {
+            document.getElementById('eventWindow').classList.add('active');
+        }
+
+        function closeEventWindow() {
+            document.getElementById('eventWindow').classList.remove('active');
+        }
+
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('taskbarTime').textContent = `${hours}:${minutes}`;
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // ESC to close window
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeEventWindow();
+            }
+        });
+    </script>
 </body>
 </html>
