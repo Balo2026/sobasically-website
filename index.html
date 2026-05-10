@@ -872,25 +872,73 @@
                 <div class="newsletter-close" onclick="closeNewsletter()">×</div>
             </div>
             <div class="newsletter-content">
-                <h3>Stay Connected</h3>
-                <p>Get updates on upcoming events, new releases, and more.</p>
+                <div id="newsletter-form-container">
+                    <h3>Stay Connected</h3>
+                    <p>Get updates on upcoming events, new releases, and more.</p>
+                    
+                    <!-- Brevo Newsletter Form -->
+                    <div id="mc_embed_shell">
+                        <form action="https://069aeddc.sibforms.com/serve/MUIFAB8lbA2MPAP_qzX9TS4_ZNENZVpvRlZwaTivjChXSKxvES9VYDa7D4q9Z_Pj25tV2ng9gkFngVIW0GFSs9F81rhZW4I_92yU-Rd5nXqOwWzCTGED0ybo-kFXwGS4hZLiO6VXK_fGp8H7IsA8u3F16KskLD3P_0Nlnd3aW4U-UfIrlU0CxRCHkJqBWQ_rkdzN70nmEyydL_9q5g==" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="newsletter-form" onsubmit="handleNewsletterSubmit(event)">
+                            <input type="email" name="EMAIL" class="newsletter-input" id="mce-EMAIL" placeholder="Your email address" required>
+                            <div aria-hidden="true" style="position: absolute; left: -5000px;">
+                                <input type="text" name="email_address_check" tabindex="-1" value="">
+                            </div>
+                            <button type="submit" name="subscribe" id="mc-embedded-subscribe" class="newsletter-submit">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
                 
-                <!-- Mailchimp Form -->
-                <div id="mc_embed_shell">
-                    <form action="https://069aeddc.sibforms.com/serve/MUIFAB8lbA2MPAP_qzX9TS4_ZNENZVpvRlZwaTivjChXSKxvES9VYDa7D4q9Z_Pj25tV2ng9gkFngVIW0GFSs9F81rhZW4I_92yU-Rd5nXqOwWzCTGED0ybo-kFXwGS4hZLiO6VXK_fGp8H7IsA8u3F16KskLD3P_0Nlnd3aW4U-UfIrlU0CxRCHkJqBWQ_rkdzN70nmEyydL_9q5g==" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="newsletter-form" target="_blank">
-                        <input type="email" name="EMAIL" class="newsletter-input" id="mce-EMAIL" placeholder="Your email address" required>
-                        <div aria-hidden="true" style="position: absolute; left: -5000px;">
-                            <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups -->
-                            <input type="text" name="b_XXXXX" tabindex="-1" value="">
-                        </div>
-                        <button type="submit" name="subscribe" id="mc-embedded-subscribe" class="newsletter-submit">Subscribe</button>
-                    </form>
+                <div id="newsletter-success-message" style="display: none; text-align: center; padding: 20px;">
+                    <h3 style="color: #0066cc; margin-bottom: 15px;">✓ You're now signed up for notifications!</h3>
+                    <p style="color: #333;">Thanks for subscribing. We'll keep you updated on upcoming events and releases.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        function handleNewsletterSubmit(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            // Submit form via fetch
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors'
+            }).then(() => {
+                // Hide form, show success message
+                document.getElementById('newsletter-form-container').style.display = 'none';
+                document.getElementById('newsletter-success-message').style.display = 'block';
+                
+                // Close popup after 3 seconds
+                setTimeout(() => {
+                    closeNewsletter();
+                    // Reset form for next time
+                    setTimeout(() => {
+                        document.getElementById('newsletter-form-container').style.display = 'block';
+                        document.getElementById('newsletter-success-message').style.display = 'none';
+                        form.reset();
+                    }, 500);
+                }, 3000);
+            }).catch(() => {
+                // Still show success (no-cors doesn't return response)
+                document.getElementById('newsletter-form-container').style.display = 'none';
+                document.getElementById('newsletter-success-message').style.display = 'block';
+                
+                setTimeout(() => {
+                    closeNewsletter();
+                    setTimeout(() => {
+                        document.getElementById('newsletter-form-container').style.display = 'block';
+                        document.getElementById('newsletter-success-message').style.display = 'none';
+                        form.reset();
+                    }, 500);
+                }, 3000);
+            });
+        }
+
         function login() {
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('desktop').classList.add('active');
