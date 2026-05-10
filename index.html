@@ -600,6 +600,139 @@
             opacity: 0.6;
             cursor: not-allowed;
         }
+
+        /* Magazine Stand */
+        .magazine-stand {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .magazine-cover {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            text-align: center;
+        }
+
+        .magazine-cover:hover {
+            transform: scale(1.05);
+        }
+
+        .magazine-cover img {
+            width: 100%;
+            height: auto;
+            border: 2px solid #999;
+            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .magazine-cover-title {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* Flipbook Viewer */
+        .flipbook-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 4000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flipbook-overlay.active {
+            display: flex;
+        }
+
+        .flipbook-container {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .flipbook-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background: #ff0000;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .flipbook-viewer {
+            position: relative;
+            width: 800px;
+            max-width: 100%;
+            height: 600px;
+            perspective: 2000px;
+        }
+
+        .flipbook-page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s ease;
+        }
+
+        .flipbook-page img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .flipbook-page.flipped {
+            transform: rotateY(-180deg);
+        }
+
+        .flipbook-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            gap: 20px;
+        }
+
+        .flipbook-nav-btn {
+            padding: 10px 30px;
+            background: linear-gradient(180deg, #0997ff 0%, #0053ee 100%);
+            color: #fff;
+            border: 1px solid #003c74;
+            border-radius: 3px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+        }
+
+        .flipbook-nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .flipbook-page-counter {
+            font-size: 16px;
+            font-weight: bold;
+            color: #000;
+        }
     </style>
 </head>
 <body>
@@ -824,10 +957,30 @@
                 </div>
             </div>
             <div class="window-content">
-                <h2>The Magazine</h2>
-                <p>A quarterly publication showcasing Winnipeg's creative community.</p>
-                <p>Art, music, culture, and the stories behind the scene.</p>
-                <p style="color: #ff0000; font-weight: bold; margin-top: 30px;">Issue #01 - Coming Soon</p>
+                <h2>The Magazine Collection</h2>
+                <p>A publication showcasing Winnipeg's creative community.</p>
+                
+                <div class="magazine-stand">
+                    <div class="magazine-cover" onclick="openMagazine('Sandman')">
+                        <img src="magazines/Sandman.jpg" alt="Sandman Magazine Cover">
+                        <div class="magazine-cover-title">Sandman</div>
+                    </div>
+                    
+                    <div class="magazine-cover" onclick="openMagazine('Zaiam')">
+                        <img src="magazines/Zaiam.jpg" alt="Zaiam Magazine Cover">
+                        <div class="magazine-cover-title">Zaiam</div>
+                    </div>
+                    
+                    <div class="magazine-cover" onclick="openMagazine('Santaklara')">
+                        <img src="magazines/Santaklara.jpg" alt="Santaklara Magazine Cover">
+                        <div class="magazine-cover-title">Santaklara</div>
+                    </div>
+                    
+                    <div class="magazine-cover" onclick="openMagazine('Ramoni')">
+                        <img src="magazines/Ramoni.jpg" alt="Ramoni Magazine Cover">
+                        <div class="magazine-cover-title">Ramoni</div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -898,7 +1051,98 @@
         </div>
     </div>
 
+    <!-- Flipbook Viewer -->
+    <div class="flipbook-overlay" id="flipbookOverlay">
+        <div class="flipbook-container">
+            <button class="flipbook-close" onclick="closeFlipbook()">×</button>
+            <div class="flipbook-viewer" id="flipbookViewer">
+                <div class="flipbook-page" id="currentPage">
+                    <img id="currentPageImg" src="" alt="Magazine Page">
+                </div>
+            </div>
+            <div class="flipbook-controls">
+                <button class="flipbook-nav-btn" id="prevPageBtn" onclick="previousPage()">← Previous</button>
+                <div class="flipbook-page-counter" id="pageCounter">Page 1 of 1</div>
+                <button class="flipbook-nav-btn" id="nextPageBtn" onclick="nextPage()">Next →</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        let currentMagazine = '';
+        let currentPageIndex = 0;
+        let totalPages = 0;
+        
+        // Magazine page counts
+        const magazinePages = {
+            'Sandman': 9,       // 9 pages total
+            'Zaiam': 7,         // 7 pages total
+            'Santaklara': 7,    // 7 pages total
+            'Ramoni': 6         // 6 pages total
+        };
+
+        function openMagazine(magazineName) {
+            currentMagazine = magazineName;
+            currentPageIndex = 0;
+            totalPages = magazinePages[magazineName] || 1;
+            
+            document.getElementById('flipbookOverlay').classList.add('active');
+            updatePage();
+        }
+
+        function closeFlipbook() {
+            document.getElementById('flipbookOverlay').classList.remove('active');
+        }
+
+        function updatePage() {
+            const pageNum = currentPageIndex + 1;
+            const imgPath = `magazines/${currentMagazine}/page${pageNum}.jpg`;
+            
+            document.getElementById('currentPageImg').src = imgPath;
+            document.getElementById('pageCounter').textContent = `Page ${pageNum} of ${totalPages}`;
+            
+            // Update button states
+            document.getElementById('prevPageBtn').disabled = currentPageIndex === 0;
+            document.getElementById('nextPageBtn').disabled = currentPageIndex === totalPages - 1;
+            
+            // Add flip animation
+            const pageEl = document.getElementById('currentPage');
+            pageEl.classList.add('flipped');
+            setTimeout(() => {
+                pageEl.classList.remove('flipped');
+            }, 100);
+        }
+
+        function nextPage() {
+            if (currentPageIndex < totalPages - 1) {
+                currentPageIndex++;
+                updatePage();
+            }
+        }
+
+        function previousPage() {
+            if (currentPageIndex > 0) {
+                currentPageIndex--;
+                updatePage();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('flipbookOverlay').classList.contains('active')) {
+                if (e.key === 'ArrowRight') nextPage();
+                if (e.key === 'ArrowLeft') previousPage();
+                if (e.key === 'Escape') closeFlipbook();
+            }
+        });
+
+        // Close when clicking outside
+        document.getElementById('flipbookOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeFlipbook();
+            }
+        });
+
         function handleNewsletterSubmit(event) {
             event.preventDefault();
             
