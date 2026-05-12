@@ -215,12 +215,13 @@
             left: 50%;
             transform: translateX(-50%);
             pointer-events: none;
+            z-index: 10;
         }
 
         .desktop-logo img {
             width: 120px;
-            opacity: 0.9;
-            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+            filter: brightness(0) invert(1) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+            z-index: 10;
         }
 
         @media (max-width: 768px) {
