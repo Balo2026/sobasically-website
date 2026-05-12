@@ -107,6 +107,7 @@
             height: 100%;
             object-fit: contain;
             animation: flipX 3s linear infinite;
+            background: white;
         }
 
         @keyframes flipX {
@@ -219,10 +220,17 @@
             padding: 10px;
         }
 
+        .desktop-icons-right .desktop-icon,
         .desktop-icons-right .desktop-icon:hover,
         .desktop-icons-right .desktop-icon.selected {
             background: none;
             border: none;
+        }
+
+        .desktop-icons-right .icon-image,
+        .desktop-icons-right .icon-image img {
+            background: transparent;
+            filter: none;
         }
 
         /* Right side - Event Poster */
@@ -488,17 +496,29 @@
         @media (max-width: 768px) {
             .desktop {
                 flex-direction: column;
+                align-items: center;
             }
 
             .desktop-icons {
                 flex-direction: row;
                 overflow-x: auto;
+                width: 100%;
             }
 
             .event-poster {
+                position: static;
+                transform: none;
                 margin: 20px auto;
-                width: 100%;
+                width: 90%;
                 max-width: 300px;
+            }
+
+            .desktop-icons-right {
+                position: static;
+                flex-direction: row;
+                justify-content: center;
+                width: 100%;
+                padding: 0;
             }
         }
 
@@ -846,16 +866,6 @@
             </div>
         </div>
 
-        <!-- Right side - Desktop Icons -->
-        <div class="desktop-icons-right">
-            <div class="desktop-icon">
-                <div class="icon-image">
-                    <img src="cube.png" alt="Cube">
-                </div>
-                <div class="icon-label">Cube</div>
-            </div>
-        </div>
-
         <!-- Right side - Event Poster -->
         <div class="event-poster" onclick="window.open('https://luma.com/qymxgru2', '_blank')">
             <div class="poster-container">
@@ -865,6 +875,16 @@
                 <div class="poster-location">592 Main St, Winnipeg</div>
             </div>
             <div class="poster-label">NEXT EVENT</div>
+        </div>
+
+        <!-- Right side - Desktop Icons -->
+        <div class="desktop-icons-right">
+            <div class="desktop-icon">
+                <div class="icon-image">
+                    <img src="cube.png" alt="Cube">
+                </div>
+                <div class="icon-label">Cube</div>
+            </div>
         </div>
 
         <!-- Windows -->
