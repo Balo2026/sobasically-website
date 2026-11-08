@@ -258,7 +258,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 350px;
+            width: min(350px, calc((100vh - 190px) * 0.75));
+            display: block;
+            text-decoration: none;
             cursor: pointer;
             transition: transform 0.2s;
             z-index: 1;
@@ -268,46 +270,12 @@
             transform: translate(-50%, -50%) scale(1.02);
         }
 
-        .poster-container {
-            background: #ff0000;
+        .poster-artwork {
+            display: block;
+            width: 100%;
+            height: auto;
             border: 3px solid #fff;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-            padding: 30px;
-        }
-
-        .poster-date {
-            font-size: 80px;
-            font-weight: 900;
-            color: #fff;
-            line-height: 0.9;
-            margin-bottom: 10px;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
-        }
-
-        .poster-month {
-            font-size: 28px;
-            font-weight: 700;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .poster-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #fff;
-            line-height: 1.2;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .poster-location {
-            font-size: 14px;
-            color: #fff;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
 
         .poster-label {
@@ -516,6 +484,7 @@
             .desktop {
                 flex-direction: column;
                 align-items: center;
+                overflow-y: auto;
             }
 
             .desktop-icons {
@@ -530,6 +499,11 @@
                 margin: 20px auto;
                 width: 90%;
                 max-width: 300px;
+                flex-shrink: 0;
+            }
+
+            .event-poster:hover {
+                transform: scale(1.02);
             }
 
             .desktop-icons-right {
@@ -891,15 +865,10 @@
         </div>
 
         <!-- Right side - Event Poster -->
-        <div class="event-poster" onclick="window.open('https://www.tickettailor.com/events/sobasically/2520042', '_blank')">
-            <div class="poster-container">
-                <div class="poster-date">21</div>
-                <div class="poster-month">NOV</div>
-                <div class="poster-title">SoBa Haüs Vol. 2</div>
-                <div class="poster-location">Hosted by <span style="font-size: 22px; font-weight: 700; letter-spacing: 1px;">RISKI</span></div>
-            </div>
+        <a class="event-poster" href="https://buytickets.at/sobasically/2520042" target="_blank" rel="noopener noreferrer" aria-label="Get tickets for SoBa Haüs Vol. 2 on November 21, 2026">
+            <img class="poster-artwork" src="posters/soba-haus-november-21.png" alt="SoBa Haüs Vol. 2, hosted by RISKI, with digital art installations by Oluuji. November 21, 10 PM to late, 592 Main St." width="1080" height="1440">
             <div class="poster-label">NEXT EVENT</div>
-        </div>
+        </a>
 
         <!-- Right side - Desktop Icons -->
         <div class="desktop-icons-right">
@@ -928,10 +897,11 @@
             <div class="window-content">
                 <h2>Upcoming</h2>
                 <div class="event-list" style="margin-bottom: 40px;">
-                    <div class="event-item" style="border-left: 4px solid #ff0000;" onclick="window.open('https://www.tickettailor.com/events/sobasically/2520042', '_blank')">
+                    <div class="event-item" style="border-left: 4px solid #ff0000;" onclick="window.open('https://buytickets.at/sobasically/2520042', '_blank')">
                         <div class="event-item-date">November 21, 2026</div>
                         <div class="event-item-title">SoBa Haüs Vol. 2</div>
                         <div class="event-item-location">Hosted by <span style="font-size: 16px; font-weight: 700; color: #000;">RISKI</span></div>
+                        <div class="event-item-location">592 Main St · 10 PM to late</div>
                     </div>
                 </div>
 
@@ -1089,10 +1059,11 @@
                 <h2>SoBa Haüs Vol. 2</h2>
                 <p><strong>Date:</strong> November 21, 2026</p>
                 <p><strong>Hosted by:</strong> <span style="font-size: 1.5em; font-weight: 700;">RISKI</span></p>
-                <p><strong>Time:</strong> TBA</p>
-                <p style="margin-top: 20px;">Join us for an evening of creativity and community at SoBa Haüs Vol. 2.</p>
+                <p><strong>Time:</strong> 10 PM to late</p>
+                <p><strong>Location:</strong> 592 Main St</p>
+                <p style="margin-top: 20px;">Join us for an evening of creativity and community at SoBa Haüs Vol. 2, with digital art installations by Oluuji.</p>
                 <p style="margin-top: 20px;">
-                    <a href="https://www.tickettailor.com/events/sobasically/2520042" target="_blank" style="display: inline-block; background: linear-gradient(180deg, #0997ff 0%, #0053ee 100%); color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 3px; border: 1px solid #003c74; font-weight: bold; text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);">Get Tickets</a>
+                    <a href="https://buytickets.at/sobasically/2520042" target="_blank" style="display: inline-block; background: linear-gradient(180deg, #0997ff 0%, #0053ee 100%); color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 3px; border: 1px solid #003c74; font-weight: bold; text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);">Get Tickets</a>
                 </p>
             </div>
         </div>
